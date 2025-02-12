@@ -2,10 +2,8 @@
 FROM openjdk:21-jdk-slim
 
 # Set the working directory
-WORKDIR /app
-
-# Copy the JAR file into the container
-COPY target/mailapis-0.0.1-SNAPSHOT.jar /app/app.jar
+WORKDIR /home/app/
+COPY target/mailapis-0.0.1-SNAPSHOT.jar /home/app/
 
 # Make the JAR file executable
 RUN chmod +x /app/app.jar
