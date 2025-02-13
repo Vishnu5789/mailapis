@@ -3,6 +3,7 @@ package com.example.mailapis.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Slf4j
 @Service
 public class MailService {
 
@@ -25,6 +27,9 @@ public class MailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true); // true = multipart
 
+        log.info("To address is :{}", to);
+        log.info("subject is :{}", subject);
+        log.info("Body is :{}", body);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body);
@@ -37,7 +42,9 @@ public class MailService {
         for (MultipartFile file : files) {
             extracted(file, helper);
         }
+        log.info("*****Sending Mail initiated*****");
         mailSender.send(message);
+        log.info("*****Sending Mail Processed*****");
         return "SUCCESS";
 
     }
