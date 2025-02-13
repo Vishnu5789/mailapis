@@ -1,22 +1,23 @@
 # Use an official OpenJDK 21 runtime as a parent image
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-jdk-slim AS build
 
 # Set the working directory
 WORKDIR /app
 
 # Copy the entire project into the container
-COPY . /app
+COPY . .
 
-# Install Maven (or Gradle)
-RUN apt-get update && apt-get install -y maven
+# Install Maven and build the application
+RUN apt-get update && apt-get install -y maven && mvn clean package -DskipTests
 
-# Build the application (this will generate the target folder and .jar file)
-RUN ./mvnw clean package
+# Use a smaller final image to run the app
+FROM openjdk:21-jdk-slim
 
-# Copy the generated JAR file into the container
-#COPY target/mailapis-0.0.1-SNAPSHOT.jar /app/app.jar
-# Make the JAR file executable
-#RUN chmod +x /app/app.jar
+# Set the working directory
+WORKDIR /app
+
+# Copy only the built JAR file from the previous stage
+COPY --from=build /app/target/mailapis-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Run the application
-CMD ["java", "-jar"]
+CMD ["java", "-jar", "/app/app.jar"]
