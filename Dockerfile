@@ -19,4 +19,4 @@ RUN ./mvnw clean package
 #RUN chmod +x /app/app.jar
 
 # Run the application
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar"]
