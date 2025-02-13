@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y maven
 RUN ./mvnw clean package
 
 # Copy the generated JAR file into the container
-COPY target/mailapis-0.0.1-SNAPSHOT.jar /app/app.jar
+#COPY target/mailapis-0.0.1-SNAPSHOT.jar /app/app.jar
 # Make the JAR file executable
 RUN chmod +x /app/app.jar
 
